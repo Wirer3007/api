@@ -42,9 +42,10 @@ def criar_usuario():
     novo = request.json
     novo['id'] = len(usuarios) + 1
     usuarios.append(novo)
-    return {
+    return jsonify(novo), 201
+ return {
     "mensagem": "Livro cadastrado com sucesso",
-    "livro": novo
+     "livro": novo
     }, 201
  return {"erro": "Título e autor são obrigatórios"}, 400
 
