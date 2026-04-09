@@ -43,10 +43,7 @@ def criar_usuario():
     novo['id'] = len(usuarios) + 1
     usuarios.append(novo)
     return jsonify(novo), 201
- return {
-    "mensagem": "Livro cadastrado com sucesso",
-     "livro": novo
-    }, 201
+    
  return {"erro": "Título e autor são obrigatórios"}, 400
 
 @app.route('/usuarios/<int:id>', methods=['PUT'])
