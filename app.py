@@ -5,113 +5,113 @@ app = Flask(__name__)
 CORS(app)
 
 # Lista de livros (simulando um banco de dados)
-usuarios = [
+livros = [
     {
         "id": 1,
-        "nome": "mairene",
-        "email": "mairene202@gmail.com",
-        "telefone": "9999999"   
+        "titulo": "kaiju n8",
+        "autor": "naoya matsumoto",
+        "data": "2020"   
     },
     {
         "id": 2,
-        "nome": "mario",
-        "email": "super.mario@gmail.com",
-        "telefone": "88888888"
+        "titulo": "Drácula",
+        "autor": "Bram Stoker",
+        "data": "1897"
     },
     {
         "id": 3,
-        "nome": "luidi",
-        "email": "luidi.manfiel@gmail.com",
-        "telefone": "77777777"
+        "titulo": "Frankstayn",
+        "autor": "Mary sheille",
+        "data": "1818"
     },
     {
         "id": 4,
-        "nome": "pity",
-        "email": "princesa.pity@gmail.com",
-        "telefone": "55555555"   
+        "titulo": "Saboroso cadaver",
+        "autor": "darkside",
+        "data": "2018"   
     },
     {
         "id": 5,
-        "nome": "daise",
-        "email": "supermario.bros@gmail.com",
-        "telefone": "44444444"   
+        "titulo": "o chamado de cuthulu",
+        "autor": "lovecraft",
+        "data": ""   
     },
     {
         "id": 6,
-        "nome": "bowser",
-        "email": "bowser.castle@gmail.com",
-        "telefone": "333333333"   
+        "titulo": "o médico e o monstro",
+        "autor": "albert lois",
+        "data": "1886"   
     },
     {
         "id": 7,
-        "nome": "rosalina",
-        "email": "rosalina.292@gmail.com",
-        "telefone": "2222222222"   
+        "titulo": "o rei de amarelo",
+        "autor": "robert w",
+        "data": "1881"   
     },
     {
         "id": 8,
-        "nome": "soshiro",
-        "email": "hoshina.2@gmail.com",
-        "telefone": "1111111111"   
+        "titulo": "o corvo",
+        "autor": "edgar allan",
+        "data": "1845"   
     },
 ]
 
 
-@app.route("/usuarios", methods=["GET"])
-def listar_usuarios():
-    return jsonify(usuarios)
+@app.route("/livros", methods=["GET"])
+def listar_livros():
+    return jsonify(livros)
 
 
 
-@app.route("/usuarios", methods=["POST"])
-def criar_usuario():
+@app.route("/livros", methods=["POST"])
+def criar_livro():
     dados = request.json
 
 
-    if not dados or not dados.get("nome") or not dados.get("id"):
+    if not dados or not dados.get("titulo") or not dados.get("autor"):
         return {"erro": "Título e autor são obrigatórios"}, 400
 
 
-    for pessoa in usuarios:
-        if pessoa["nome"].lower() == dados["nome"].lower():
+    for livro in livros:
+        if livro["titulo"].lower() == dados["titulo"].lower():
             return {"erro": "Usuario já cadastrado"}, 400
 
     novo = {
-        "id": len(usuarios) + 1,
-        "nome": dados["nome"],
-        "email": dados["email"],
-        "telefone": dados.get("telefone", None)
+        "id": len(livros) + 1,
+        "titulo": dados["titulo"],
+        "autor": dados["autor"],
+        "data": dados.get("data", None)
     }
 
-    usuarios.append(novo)
+    livros.append(novo)
     return jsonify(novo), 201
 
 
 
-@app.route("/usuarios/<int:id>", methods=["PUT"])
+@app.route("/livros/<int:id>", methods=["PUT"])
 def atualizar_usuario(id):
-    for usuario in usuarios:
-        if usuario["id"] == id:
+    for livro in livros:
+        if livro["id"] == id:
             dados = request.json
 
-            usuario["nome"] = dados.get("nome", usuario["nome"])
-            usuario["email"] = dados.get("email", usuario["email"])
-            usuario["telefone"] = dados.get("telefone", usuario["telefone"])
+            livro["titulo"] = dados.get("titulo", livro["titulo"])
+            livro["autor"] = dados.get("autor", livro["autor"])
+            livro["data"] = dados.get("data", livro["data"])
 
-            return jsonify(usuario)
+            return jsonify(livro)
 
-    return {"erro": "Pessoa não encontrado"}, 404
+    return {"erro": "livro não encontrado"}, 404
 
 
 
-@app.route("/usuarios/<int:id>", methods=["DELETE"])
+@app.route("/livros/<int:id>", methods=["DELETE"])
 def deletar_usuario(id):
-    for usuario in usuarios:
-        if usuario["id"] == id:
-            usuarios.remove(usuario)
-            return {"mensagem": "Pessoa removido"}
+    for livro in livros:
+        if livro["id"] == id:
+            livro.remove(livros)
+            return {"mensagem": "livro removido"}
 
-    return {"erro": "Usuario não encontrado"}, 404
+    return {"erro": "livro não encontrado"}, 404
 
 
 
