@@ -108,7 +108,7 @@ def atualizar_usuario(id):
 def deletar_usuario(id):
     for livro in livros:
         if livro["id"] == id:
-            livro.remove(livros)
+            livros.remove(livro)
             return {"mensagem": "livro removido"}
 
     return {"erro": "livro não encontrado"}, 404
