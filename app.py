@@ -68,13 +68,13 @@ def criar_livro():
     dados = request.json
 
 
-    if not dados or not dados.get("titulo") or not dados.get("autor"):
+    if not dados or not dados.get("titulo") or not dados.get("titulo"):
         return {"erro": "Título e autor são obrigatórios"}, 400
 
 
     for livro in livros:
         if livro["titulo"].lower() == dados["titulo"].lower():
-            return {"erro": "Usuario já cadastrado"}, 400
+            return {"erro": "Livro já cadastrado"}, 400
 
     novo = {
         "id": len(livros) + 1,
@@ -89,7 +89,7 @@ def criar_livro():
 
 
 @app.route("/livros/<int:id>", methods=["PUT"])
-def atualizar_usuario(id):
+def atualizar_livro(id):
     for livro in livros:
         if livro["id"] == id:
             dados = request.json
@@ -105,7 +105,7 @@ def atualizar_usuario(id):
 
 
 @app.route("/livros/<int:id>", methods=["DELETE"])
-def deletar_usuario(id):
+def deletar_livro(id):
     for livro in livros:
         if livro["id"] == id:
             livros.remove(livro)
