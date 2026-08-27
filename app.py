@@ -4,12 +4,13 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+# Lista de livros (simulando um banco de dados)
 livros = [
     {
         "id": 1,
-        "titulo": "Kaiju Nº 8",
-        "autor": "Naoya Matsumoto",
-        "data": "2020"
+        "titulo": "kaiju n8",
+        "autor": "naoya matsumoto",
+        "data": "2020"   
     },
     {
         "id": 2,
@@ -19,42 +20,41 @@ livros = [
     },
     {
         "id": 3,
-        "titulo": "Frankenstein",
-        "autor": "Mary Shelley",
+        "titulo": "Frankstayn",
+        "autor": "Mary sheille",
         "data": "1818"
     },
     {
         "id": 4,
-        "titulo": "Saboroso Cadáver",
-        "autor": "DarkSide",
-        "data": "2018"
+        "titulo": "Saboroso cadaver",
+        "autor": "darkside",
+        "data": "2018"   
     },
     {
         "id": 5,
-        "titulo": "O Chamado de Cthulhu",
-        "autor": "H. P. Lovecraft",
-        "data": "1926"
+        "titulo": "o chamado de cuthulu",
+        "autor": "lovecraft",
+        "data": ""   
     },
     {
         "id": 6,
-        "titulo": "O Médico e o Monstro",
-        "autor": "Robert Louis Stevenson",
-        "data": "1886"
+        "titulo": "o médico e o monstro",
+        "autor": "albert lois",
+        "data": "1886"   
     },
     {
         "id": 7,
-        "titulo": "O Rei de Amarelo",
-        "autor": "Robert W. Chambers",
-        "data": "1895"
+        "titulo": "o rei de amarelo",
+        "autor": "robert w",
+        "data": "1881"   
     },
     {
         "id": 8,
-        "titulo": "O Corvo",
-        "autor": "Edgar Allan Poe",
-        "data": "1845"
-    }
+        "titulo": "o corvo",
+        "autor": "edgar allan",
+        "data": "1845"   
+    },
 ]
-
 
 
 @app.route("/livros", methods=["GET"])
@@ -65,12 +65,10 @@ def listar_livros():
 
 @app.route("/livros", methods=["POST"])
 def criar_livro():
-    dados = request.get_json()
+    dados = request.json
 
-    if not dados:
-        return {"erro": "Dados não enviados"}, 400
 
-    if not dados.get("titulo") or not dados.get("autor"):
+    if not dados or not dados.get("titulo") or not dados.get("autor"):
         return {"erro": "Título e autor são obrigatórios"}, 400
 
 
@@ -78,18 +76,14 @@ def criar_livro():
         if livro["titulo"].lower() == dados["titulo"].lower():
             return {"erro": "Livro já cadastrado"}, 400
 
-
-    novo_id = max([livro["id"] for livro in livros], default=0) + 1
-
     novo = {
-        "id": novo_id,
+        "id": len(livros) + 1,
         "titulo": dados["titulo"],
         "autor": dados["autor"],
         "data": dados.get("data", None)
     }
 
     livros.append(novo)
-
     return jsonify(novo), 201
 
 
@@ -98,26 +92,7 @@ def criar_livro():
 def atualizar_livro(id):
     for livro in livros:
         if livro["id"] == id:
-
-            dados = request.get_json()
-
-            if not dados:
-                return {"erro": "Dados não enviados"}, 400
-
-            if "titulo" in dados and not dados["titulo"]:
-                return {"erro": "O título não pode estar vazio"}, 400
-
-            if "autor" in dados and not dados["autor"]:
-                return {"erro": "O autor não pode estar vazio"}, 400
-
-          
-            if "titulo" in dados:
-                for outro_livro in livros:
-                    if (
-                        outro_livro["id"] != id
-                        and outro_livro["titulo"].lower() == dados["titulo"].lower()
-                    ):
-                        return {"erro": "Já existe outro livro com esse título"}, 400
+            dados = request.json
 
             livro["titulo"] = dados.get("titulo", livro["titulo"])
             livro["autor"] = dados.get("autor", livro["autor"])
@@ -125,7 +100,7 @@ def atualizar_livro(id):
 
             return jsonify(livro)
 
-    return {"erro": "Livro não encontrado"}, 404
+    return {"erro": "livro não encontrado"}, 404
 
 
 
@@ -134,12 +109,9 @@ def deletar_livro(id):
     for livro in livros:
         if livro["id"] == id:
             livros.remove(livro)
+            return {"mensagem": "livro removido"}
 
-            return {
-                "mensagem": "Livro removido com sucesso"
-            }
-
-    return {"erro": "Livro não encontrado"}, 404
+    return {"erro": "livro não encontrado"}, 404
 
 
 
