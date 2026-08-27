@@ -68,7 +68,7 @@ def criar_livro():
     dados = request.json
 
 
-    if not dados or not dados.get("titulo") or not dados.get("autor"):
+    if not dados or not dados.get("titulo") or not dados.get("titulo"):
         return {"erro": "Título e autor são obrigatórios"}, 400
 
 
